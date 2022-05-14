@@ -7,10 +7,10 @@
 
 namespace py = pybind11;
 
-py::array_t<double> add_arrays(py::array_t<double> input1, py::array_t<double> input2)
+py::array_t<double> impute_image(py::array_t<uint16_t> image, py::array_t<float> calibrationImage)
 {
-    py::buffer_info buf1 = input1.request();
-    py::buffer_info buf2 = input2.request();
+    py::buffer_info buf1 = image.request();
+    py::buffer_info buf2 = calibrationImage.request();
 
     if (buf1.size != buf2.size)
     {
@@ -54,7 +54,7 @@ PYBIND11_MODULE(oniip, m)
            subtract
     )pbdoc";
 
-    m.def("add_arrays", &add_arrays, R"pbdoc(
+    m.def("impute_image", &impute_image, R"pbdoc(
         Add two arrays
         Some other explanation about the add function.
     )pbdoc");
