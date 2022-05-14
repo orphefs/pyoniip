@@ -7,39 +7,31 @@
 
 namespace py = pybind11;
 
-py::array_t<double> impute_image(py::array_t<uint16_t> image, py::array_t<float> calibrationImage)
+py::array_t<float> impute_image(py::array_t<uint16_t> image, py::array_t<float> calibrationImage)
 {
-    py::buffer_info buf1 = image.request();
-    py::buffer_info buf2 = calibrationImage.request();
+    auto r = calibrationImage.unchecked<2>(); // x must have ndim = 3; can be non-writeable
 
-    if (buf1.size != buf2.size)
-    {
-        throw std::runtime_error("Input shapes must match");
-    }
+    py::array_t<float> myArray({r.shape(0), r.shape(1)});
+    auto r2 = myArray.mutable_unchecked<2>();
 
-    /*  allocate the buffer */
-    py::array_t<double> result = py::array_t<double>(buf1.size);
-
-    py::buffer_info buf3 = result.request();
-
-    double *ptr1 = (double *)buf1.ptr,
-           *ptr2 = (double *)buf2.ptr,
-           *ptr3 = (double *)buf3.ptr;
-    int X = buf1.shape[0];
-    int Y = buf1.shape[1];
-
-    for (size_t idx = 0; idx < X; idx++)
-    {
-        for (size_t idy = 0; idy < Y; idy++)
+    for (py::ssize_t i = 0; i < r.shape(0); i++)
+        for (py::ssize_t j = 0; j < r.shape(1); j++)
         {
-            ptr3[idx * Y + idy] = ptr1[idx * Y + idy] + ptr2[idx * Y + idy];
+
+            r2(i, j) = r(i, j);
+
+            const uint16_t neighbouring_indices[][2] = {
+                {i + 1, j},
+                {i + 1, j + 1},
+                {i + 1, j - 1},
+                {i - 1, j},
+                {i - 1, j + 1},
+                {i - 1, j - 1},
+                {i, j + 1},
+                {i, j - 1}};
         }
-    }
 
-    // reshape array to match input shape
-    result.resize({X, Y});
-
-    return result;
+    return myArray;
 }
 
 PYBIND11_MODULE(oniip, m)
