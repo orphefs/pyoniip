@@ -91,18 +91,29 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
 PYBIND11_MODULE(pyoniip, m)
 {
     m.doc() = R"pbdoc(
-        Pybind11 example plugin
+        pyoniip
         -----------------------
-        .. currentmodule:: cmake_example
+        .. currentmodule:: pyoniip
         .. autosummary::
            :toctree: _generate
-           add
-           subtract
+           impute_image
     )pbdoc";
 
     m.def("impute_image", &impute_image, R"pbdoc(
-        Add two arrays
-        Some other explanation about the add function.
+        Pixel-wise mean imputation of an image
+
+        This function takes as input two numpy arrays: 
+         image[][]: uint16
+         calibrationImage[][]: float
+
+         of the same dimensions.
+         The algorithm traverses the calibrationImage on a 
+         pixel-by-pixel basis, looking for negative values. 
+         A value average of nearest-neighbour (valid) pixels relative
+         to the query pixel image[i,j] is then computed and imputed into
+         image[i,j]. calibrationImage[i,j] is then set to 0.0 to indicate
+         a corrected measurement. Array operations are not in-place 
+         for the purpose of being explicit. 
     )pbdoc");
 
 #ifdef VERSION_INFO
