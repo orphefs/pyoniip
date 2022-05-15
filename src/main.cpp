@@ -17,8 +17,16 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
     auto destImg = result.mutable_unchecked<2>();
 
     // init copy of calibrationImage
-    py::array_t<uint16_t> calibrationImage2(calibrationImage);
+    py::array_t<uint16_t> calibrationImage2({calibrationImage.shape(0), calibrationImage.shape(1)});
     auto clbImage = calibrationImage2.mutable_unchecked<2>(); // x must have ndim = 2; can be non-writeable
+    auto srcClbImage = calibrationImage.unchecked<2>();       // x must have ndim = 2; can be non-writeable
+
+    // copy calibrationImage to calibrationImage2
+    for (py::ssize_t i = 0; i < srcClbImage.shape(0); i++)
+        for (py::ssize_t j = 0; j < srcClbImage.shape(1); j++)
+        {
+            clbImage(i, j) = srcClbImage(i, j);
+        }
 
     // copy srcImg to destImg
     for (py::ssize_t i = 0; i < srcImg.shape(0); i++)
