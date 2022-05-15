@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+#include <functional>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
@@ -45,28 +47,29 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
             {
                 float calibrationValue = clbImage(i, j);
 
-                const ssize_t neighbouringIndices[][2] = {
-                    {i + 1, j},
-                    {i + 1, j + 1},
-                    {i + 1, j - 1},
-                    {i - 1, j},
-                    {i - 1, j + 1},
-                    {i - 1, j - 1},
-                    {i, j + 1},
-                    {i, j - 1}};
-                if (calibrationValue < 0)
+                if (std::isless(calibrationValue, 0.0f))
                 {
-                    ssize_t total = 0;
-                    ssize_t count = 0;
-                    ssize_t mean = 0;
+                    const ssize_t neighbouringIndices[][2] = {
+                        {i + 1, j},
+                        {i + 1, j + 1},
+                        {i + 1, j - 1},
+                        {i - 1, j},
+                        {i - 1, j + 1},
+                        {i - 1, j - 1},
+                        {i, j + 1},
+                        {i, j - 1}};
+
+                    int32_t total = 0;
+                    int32_t count = 0;
+                    int32_t mean = 0;
                     for (auto &indices : neighbouringIndices)
                     {
                         float neighbourgingCalibValue = clbImage(indices[0], indices[1]);
 
-                        // check which pixels are 0 around the query pixel in the calibration image
-                        if (neighbourgingCalibValue >= 0)
+                        // check which pixels are 0 or greater around the query pixel in the calibration image
+                        if (neighbourgingCalibValue >= 0.0f)
                         {
-                            total += srcImg(indices[0], indices[1]);
+                            total += destImg(indices[0], indices[1]);
                             count += 1;
                         }
                     }
@@ -74,13 +77,16 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
                     if (total != 0)
                     {
                         mean = total / count;
+                        // std::cout << "mean: " << mean << std::endl;
+                        // std::cout << "total: " << total << std::endl;
+                        // std::cout << "count: " << count << std::endl;
                     }
 
                     // impute the pixel in the actual image
                     destImg(i, j) = static_cast<uint16_t>(mean);
 
                     // update the calibration image from negative to 0 for that index
-                    clbImage(i, j) = 0;
+                    clbImage(i, j) = 0.0f;
                 }
             }
         }
