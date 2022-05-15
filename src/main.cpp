@@ -72,7 +72,7 @@ py::array_t<float> impute_image(py::array_t<uint16_t> image, py::array_t<float> 
     return image;
 }
 
-PYBIND11_MODULE(oniip, m)
+PYBIND11_MODULE(pyoniip, m)
 {
     m.doc() = R"pbdoc(
         Pybind11 example plugin

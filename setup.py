@@ -17,7 +17,7 @@ __version__ = "0.0.1"
 #   reproducible builds (https://github.com/pybind/python_example/pull/53)
 
 ext_modules = [
-    Pybind11Extension("oniip",
+    Pybind11Extension("pyoniip",
                       ["src/main.cpp"],
                       # Example: passing in the version to the compiled code
                       define_macros=[('VERSION_INFO', __version__)],
@@ -26,7 +26,7 @@ ext_modules = [
 ]
 
 setup(
-    name="oniip",
+    name="pyoniip",
     version=__version__,
     author="Orfeas Kypris",
     author_email="kypriso@gmail.com",
