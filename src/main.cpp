@@ -7,13 +7,13 @@
 
 namespace py = pybind11;
 
-py::array_t<float> impute_image(py::array_t<uint16_t> image, py::array_t<float> calibrationImage)
+py::array_t<uint16_t> impute_image(py::array_t<uint16_t> image, py::array_t<float> calibrationImage)
 {
     auto clbImage = calibrationImage.mutable_unchecked<2>(); // x must have ndim = 2; can be non-writeable
     auto srcImg = image.mutable_unchecked<2>();              // x must have ndim = 2; can be non-writeable
 
     // init new array for destination
-    py::array_t<float> result({srcImg.shape(0), srcImg.shape(1)});
+    py::array_t<uint16_t> result({srcImg.shape(0), srcImg.shape(1)});
     auto destImg = result.mutable_unchecked<2>();
 
     // copy srcImg to destImg
