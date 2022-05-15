@@ -17,7 +17,7 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
     auto destImg = result.mutable_unchecked<2>();
 
     // init copy of calibrationImage
-    py::array_t<uint16_t> calibrationImage2({calibrationImage.shape(0), calibrationImage.shape(1)});
+    py::array_t<float> calibrationImage2({calibrationImage.shape(0), calibrationImage.shape(1)});
     auto clbImage = calibrationImage2.mutable_unchecked<2>(); // x must have ndim = 2; can be non-writeable
     auto srcClbImage = calibrationImage.unchecked<2>();       // x must have ndim = 2; can be non-writeable
 
@@ -38,7 +38,7 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
     for (py::ssize_t i = 0; i < clbImage.shape(0); i++)
         for (py::ssize_t j = 0; j < clbImage.shape(1); j++)
         {
-            if ((i == 0) || (j == 0) || i == clbImage.shape(0) - 1 || j == clbImage.shape(1) - 1)
+            if ((i == 0) || (j == 0) || (i == (clbImage.shape(0) - 1)) || (j == (clbImage.shape(1) - 1)))
             {
             }
             else
