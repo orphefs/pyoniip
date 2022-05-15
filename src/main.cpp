@@ -61,19 +61,18 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
                             total += srcImg(indices[0], indices[1]);
                             count += 1;
                         }
-
-                        // and use those to compute the average in the actual image}
-                        if (total != 0)
-                        {
-                            mean = total / count;
-                        }
-
-                        // impute the pixel in the actual image
-                        destImg(i, j) = static_cast<uint16_t>(mean);
-
-                        // update the calibration image from negative to 0 for that index
-                        clbImage(i, j) = 0;
                     }
+                    // and use those to compute the average in the actual image}
+                    if (total != 0)
+                    {
+                        mean = total / count;
+                    }
+
+                    // impute the pixel in the actual image
+                    destImg(i, j) = static_cast<uint16_t>(mean);
+
+                    // update the calibration image from negative to 0 for that index
+                    clbImage(i, j) = 0;
                 }
             }
         }
