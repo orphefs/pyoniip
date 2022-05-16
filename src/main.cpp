@@ -32,57 +32,52 @@ py::array_t<uint16_t> impute_image(const py::array_t<uint16_t> &image, const py:
             destImg(i, j) = srcImg(i, j);
         }
 
-    for (py::ssize_t i = 0; i < clbImage.shape(0); i++)
-        for (py::ssize_t j = 0; j < clbImage.shape(1); j++)
+    for (py::ssize_t i = 1; i < clbImage.shape(0) - 1; i++)
+        for (py::ssize_t j = 1; j < clbImage.shape(1) - 1; j++)
         {
-            if ((i == 0) || (j == 0) || (i == (clbImage.shape(0) - 1)) || (j == (clbImage.shape(1) - 1)))
-            {
-            }
-            else
-            {
-                float calibrationValue = clbImage(i, j);
 
-                if (std::isless(calibrationValue, 0.0f))
+            float calibrationValue = clbImage(i, j);
+
+            if (std::isless(calibrationValue, 0.0f))
+            {
+                const ssize_t neighbouringIndices[][2] = {
+                    {i + 1, j},
+                    {i + 1, j + 1},
+                    {i + 1, j - 1},
+                    {i - 1, j},
+                    {i - 1, j + 1},
+                    {i - 1, j - 1},
+                    {i, j + 1},
+                    {i, j - 1}};
+
+                int32_t total = 0;
+                int32_t count = 0;
+                int32_t mean = 0;
+                for (auto &indices : neighbouringIndices)
                 {
-                    const ssize_t neighbouringIndices[][2] = {
-                        {i + 1, j},
-                        {i + 1, j + 1},
-                        {i + 1, j - 1},
-                        {i - 1, j},
-                        {i - 1, j + 1},
-                        {i - 1, j - 1},
-                        {i, j + 1},
-                        {i, j - 1}};
+                    float neighbourgingCalibValue = clbImage(indices[0], indices[1]);
 
-                    int32_t total = 0;
-                    int32_t count = 0;
-                    int32_t mean = 0;
-                    for (auto &indices : neighbouringIndices)
+                    // check which pixels are 0 or greater around the query pixel in the calibration image
+                    if (neighbourgingCalibValue >= 0.0f)
                     {
-                        float neighbourgingCalibValue = clbImage(indices[0], indices[1]);
-
-                        // check which pixels are 0 or greater around the query pixel in the calibration image
-                        if (neighbourgingCalibValue >= 0.0f)
-                        {
-                            total += destImg(indices[0], indices[1]);
-                            count += 1;
-                        }
+                        total += destImg(indices[0], indices[1]);
+                        count += 1;
                     }
-                    // and use those to compute the average in the actual image}
-                    if (total != 0)
-                    {
-                        mean = total / count;
-                        // std::cout << "mean: " << mean << std::endl;
-                        // std::cout << "total: " << total << std::endl;
-                        // std::cout << "count: " << count << std::endl;
-                    }
-
-                    // impute the pixel in the actual image
-                    destImg(i, j) = static_cast<uint16_t>(mean);
-
-                    // update the calibration image from negative to 0 for that index
-                    clbImage(i, j) = 0.0f;
                 }
+                // and use those to compute the average in the actual image}
+                if (total != 0)
+                {
+                    mean = total / count;
+                    // std::cout << "mean: " << mean << std::endl;
+                    // std::cout << "total: " << total << std::endl;
+                    // std::cout << "count: " << count << std::endl;
+                }
+
+                // impute the pixel in the actual image
+                destImg(i, j) = static_cast<uint16_t>(mean);
+
+                // update the calibration image from negative to 0 for that index
+                clbImage(i, j) = 0.0f;
             }
         }
     return result;
