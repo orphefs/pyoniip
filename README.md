@@ -10,7 +10,7 @@ pyoniip
 [actions-pip-badge]:       https://github.com/orphefs/pyoniip/workflows/Pip/badge.svg
 
 A [pybind11](https://github.com/pybind/pybind11) module built with a
-CMake-based build system, based on [this](https://github.com/pybind/cmake_example) template.
+CMake-based build system, based on [this](https://github.com/pybind/cmake_example) template. This module is used in [this](https://github.com/orphefs/oni-image-processing-runner) repo for pixel-wise imputation of a microscope image.
 
 Installation
 ------------
