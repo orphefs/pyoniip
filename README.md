@@ -4,15 +4,10 @@ pyoniip
 |      CI              | status |
 |----------------------|--------|
 | pip builds           | [![Pip Actions Status][actions-pip-badge]][actions-pip-link] |
-| [`cibuildwheel`][]   | [![Wheels Actions Status][actions-wheels-badge]][actions-wheels-link] |
 
 [actions-badge]:           https://github.com/orphefs/pyoniip/workflows/Tests/badge.svg
-[actions-conda-link]:      https://github.com/orphefs/pyoniip/actions?query=workflow%3A%22Conda
-[actions-conda-badge]:     https://github.com/orphefs/pyoniip/workflows/Conda/badge.svg
 [actions-pip-link]:        https://github.com/orphefs/pyoniip/actions?query=workflow%3A%22Pip
 [actions-pip-badge]:       https://github.com/orphefs/pyoniip/workflows/Pip/badge.svg
-[actions-wheels-link]:     https://github.com/orphefs/pyoniip/actions?query=workflow%3AWheels
-[actions-wheels-badge]:    https://github.com/orphefs/pyoniip/workflows/Wheels/badge.svg
 
 A [pybind11](https://github.com/pybind/pybind11) module built with a
 CMake-based build system.
