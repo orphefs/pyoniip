@@ -18,6 +18,7 @@ filterwarnings = ["error"]
 testpaths = ["tests"]
 
 [tool.cibuildwheel]
+test-requires = "numpy"
 test-command = "python {project}/tests/test.py"
 test-extras = ["test"]
 test-skip = ["*universal2:arm64"]
