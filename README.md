@@ -17,18 +17,25 @@ pyoniip
 [actions-wheels-link]:     https://github.com/orphefs/pyoniip/actions?query=workflow%3AWheels
 [actions-wheels-badge]:    https://github.com/orphefs/pyoniip/workflows/Wheels/badge.svg
 
-A project built with [pybind11](https://github.com/pybind/pybind11).
-This requires Python 3.6+; for older versions of Python, check the commit
-history.
+A [pybind11](https://github.com/pybind/pybind11) module built with a
+CMake-based build system.
 
 Installation
 ------------
 
-- clone this repository
-- `pip install ./pyoniip`
+Just clone this repository and pip install. Note the `--recursive` option which is
+needed for the pybind11 submodule:
+
+```bash
+git clone --recursive https://github.com/orphefs/pyoniip.git
+pip install ./pyoniip
+```
+
+With the `setup.py` file included in this example, the `pip install` command will
+invoke CMake and build the pybind11 module as specified in `CMakeLists.txt`.
 
 CI Examples
------------
+------------
 
 There are examples for CI in `.github/workflows`. A simple way to produces
 binary "wheels" for all platforms is illustrated in the "wheels.yml" file,
@@ -36,7 +43,7 @@ using [`cibuildwheel`][]. You can also see a basic recipe for building and
 testing in `pip.yml`, and `conda.yml` has an example of a conda recipe build.
 
 Building the documentation
---------------------------
+------------
 
 Documentation for the example project is generated using Sphinx. Sphinx has the
 ability to automatically inspect the signatures and documentation strings in
@@ -44,22 +51,48 @@ the extension module to generate beautiful documentation in a variety formats.
 The following command generates HTML-based reference documentation; for other
 formats please refer to the Sphinx manual:
 
-- `cd python_example/docs`
+- `cd cmake_example/docs`
 - `make html`
 
 License
 -------
 
-pybind11 is provided under a BSD-style license that can be found in the LICENSE
+pyoniip is provided under a BSD-style license that can be found in the LICENSE
 file. By using, distributing, or contributing to this project, you agree to the
 terms and conditions of this license.
 
-Test call
+Tests
 ---------
+
+First, instatiate a local `venv` environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r unpinned_requirements.txt
+```
+
+Then you can run the tests:
+
+```bash
+python tests/test.py
+```
+
+## Usage
+
+You can import and use the module like so:
 
 ```python
 import pyoniiip
-pyoniip.impute_image(image: npt.typing.NDArray[np.uint16], calibration_image: npt.typing.NDArray[np.float])
+imputed_image = pyoniip.impute_image(image, calibration_image)
+```
+
+where
+
+```python
+image: npt.typing.NDArray[np.uint16]
+calibration_image: npt.typing.NDArray[np.float]
+imputed_image: npt.typing.NDArray[np.uint16]
 ```
 
 [`cibuildwheel`]:          https://cibuildwheel.readthedocs.io
