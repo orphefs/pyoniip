@@ -52,8 +52,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyoniip'
-copyright = '2016, Sylvain Corlay'
-author = 'Sylvain Corlay'
+copyright = '2022, Orfeas Kypris'
+author = 'Orfeas Kypris'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
