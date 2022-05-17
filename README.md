@@ -10,7 +10,7 @@ pyoniip
 [actions-pip-badge]:       https://github.com/orphefs/pyoniip/workflows/Pip/badge.svg
 
 A [pybind11](https://github.com/pybind/pybind11) module built with a
-CMake-based build system.
+CMake-based build system, based on [this](https://github.com/pybind/cmake_example) template.
 
 Installation
 ------------
