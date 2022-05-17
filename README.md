@@ -1,11 +1,8 @@
 pyoniip
 ==============
 
-[![Gitter][gitter-badge]][gitter-link]
-
 |      CI              | status |
 |----------------------|--------|
-| conda.recipe         | [![Conda Actions Status][actions-conda-badge]][actions-conda-link] |
 | pip builds           | [![Pip Actions Status][actions-pip-badge]][actions-pip-link] |
 | [`cibuildwheel`][]   | [![Wheels Actions Status][actions-wheels-badge]][actions-wheels-link] |
 
