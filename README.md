@@ -82,9 +82,9 @@ imputed_image = pyoniip.impute_image(image, calibration_image)
 where
 
 ```python
-image: npt.typing.NDArray[np.uint16]
-calibration_image: npt.typing.NDArray[np.float]
-imputed_image: npt.typing.NDArray[np.uint16]
+image: numpy.typing.NDArray[np.uint16]
+calibration_image: numpy.typing.NDArray[np.float]
+imputed_image: numpy.typing.NDArray[np.uint16]
 ```
 
 [`cibuildwheel`]:          https://cibuildwheel.readthedocs.io
